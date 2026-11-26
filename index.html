@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>위버스 사녹 폼림 연습 사이트</title>
+  <title>위버스 사녹 폼림 연습 사이트 (서버시간 동기화 & 방송 선택)</title>
   <style>
     * {
       box-sizing: border-box;
@@ -23,7 +23,7 @@
     .container {
       width: 100%;
       max-width: 480px;
-      background-color: #ffffff;
+      background-color: #f8f9fa;
       min-height: 100vh;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.06);
       display: flex;
@@ -57,7 +57,7 @@
       border-radius: 12px;
     }
 
-    /* 네이비즘 스타일 실시간 서버 시계 및 컨트롤 영역 */
+    /* 실시간 표준 서버 시계 및 설정 영역 */
     .timer-box {
       background-color: #161920;
       color: #fff;
@@ -190,114 +190,178 @@
       background-color: #009e94;
     }
 
-    /* 본문 컨텐츠 영역 */
+    /* 본문 카드형 폼 영역 (위버스 실제 UI 스타일) */
     .content {
-      padding: 22px 20px;
+      padding: 16px;
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
-    .event-title {
-      font-size: 19px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      line-height: 1.4;
-      color: #111;
+    .form-card {
+      background-color: #ffffff;
+      border-radius: 14px;
+      padding: 18px 16px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      border: 1px solid #eceef0;
     }
 
-    .event-info {
-      font-size: 13px;
-      color: #555;
-      background-color: #f8f9fa;
-      padding: 12px 14px;
-      border-radius: 8px;
-      margin-bottom: 22px;
-      line-height: 1.6;
-      border: 1px solid #efefef;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
+    .card-label {
       display: block;
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: #333;
+      font-size: 15px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 6px;
     }
 
-    .form-group label span.req {
-      color: #00d2c4;
+    .card-label span.req {
+      color: #666;
+      font-weight: 400;
+      font-size: 14px;
       margin-left: 2px;
+    }
+
+    .card-subtext {
+      font-size: 12px;
+      color: #8e9299;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .card-helper {
+      font-size: 12px;
+      color: #8e9299;
+      margin-top: 8px;
     }
 
     .input-text {
       width: 100%;
-      padding: 14px;
-      border: 1px solid #dcdcdc;
-      border-radius: 10px;
+      padding: 13px 14px;
+      border: 1px solid #dcdfe4;
+      border-radius: 8px;
       font-size: 15px;
       outline: none;
       transition: border-color 0.2s;
+      background-color: #fff;
     }
 
     .input-text:focus {
       border-color: #00d2c4;
     }
 
+    /* 전화번호 입력 영역 (+82 + 번호 입력) */
+    .phone-input-wrap {
+      display: flex;
+      align-items: center;
+      border: 1px solid #dcdfe4;
+      border-radius: 8px;
+      background-color: #fff;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .phone-input-wrap:focus-within {
+      border-color: #00d2c4;
+    }
+
+    .country-select {
+      border: none;
+      background: transparent;
+      padding: 13px 10px 13px 14px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #222;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .phone-divider {
+      width: 1px;
+      height: 20px;
+      background-color: #e5e7eb;
+    }
+
+    .phone-input {
+      flex: 1;
+      border: none;
+      padding: 13px 14px;
+      font-size: 15px;
+      outline: none;
+    }
+
     /* 객관식 선택지 스타일 */
     .radio-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
     }
 
     .radio-item {
       display: flex;
       align-items: center;
-      padding: 14px 16px;
-      border: 1.5px solid #e5e7eb;
-      border-radius: 10px;
+      padding: 14px 4px;
+      border-bottom: 1px solid #f1f3f5;
       cursor: pointer;
-      transition: all 0.15s;
     }
 
-    .radio-item:hover {
-      background-color: #f9fafb;
-    }
-
-    .radio-item.selected {
-      border-color: #00d2c4;
-      background-color: #f0fdfa;
+    .radio-item:last-child {
+      border-bottom: none;
+      padding-bottom: 4px;
     }
 
     .radio-item input[type="radio"] {
       accent-color: #00d2c4;
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       margin-right: 12px;
       cursor: pointer;
     }
 
     .radio-item span {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 500;
       color: #222;
     }
 
+    /* 약관 동의 카드 */
+    .agree-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      color: #222;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f3f5;
+    }
+
+    .agree-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #00d2c4;
+    }
+
+    .agree-sub {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #555;
+      padding-top: 10px;
+    }
+
     /* 하단 버튼 */
     .bottom-area {
-      padding: 16px 20px 28px;
-      border-top: 1px solid #eee;
-      background-color: #fff;
+      padding: 8px 16px 28px;
+      background-color: #f8f9fa;
     }
 
     .btn-submit {
       width: 100%;
       padding: 16px;
       border: none;
-      border-radius: 12px;
+      border-radius: 10px;
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
@@ -305,7 +369,7 @@
     }
 
     .btn-submit:disabled {
-      background-color: #e0e2e5;
+      background-color: #dcdde1;
       color: #9aa0a6;
       cursor: not-allowed;
     }
@@ -324,6 +388,12 @@
     }
 
     /* 완료 화면 스타일 */
+    .complete-screen {
+      background-color: #ffffff;
+      padding: 24px 20px;
+      flex: 1;
+    }
+
     .complete-box {
       text-align: center;
       padding: 16px 4px;
@@ -354,14 +424,7 @@
       font-size: 22px;
       font-weight: 700;
       color: #111;
-      margin-bottom: 40px;
-    }
-
-    .complete-desc {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 18px;
-      display: none; /* 기존 설명 숨김 처리 후 위버스 스타일 카드 활용 */
+      margin-bottom: 32px;
     }
 
     .result-card {
@@ -373,7 +436,6 @@
       font-size: 14px;
       line-height: 1.8;
       margin-bottom: 14px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
     .feedback-card {
@@ -422,11 +484,11 @@
 <div class="container">
   <!-- 상단 헤더 -->
   <header>
-    <h1>신청 상세</h1>
+    <h1 id="headerTitle">이벤트 신청</h1>
     <span class="badge">위버스 실전 연습</span>
   </header>
 
-  <!-- 네이비즘 스타일 실시간 표준 서버 시계 및 방송/정원 설정 -->
+  <!-- 실시간 표준 서버 시계 및 방송/정원 설정 -->
   <div class="timer-box">
     <div class="sync-status" id="syncStatus">
       <span class="sync-dot"></span>
@@ -472,63 +534,71 @@
     </div>
   </div>
 
-  <!-- [1단계] 신청 전 개인정보 입력 및 정각 대기 화면 -->
-  <div id="step1" class="content">
-    <div class="event-title" id="eventTitleDisplay">261127 KBS 뮤직뱅크 사전녹화 참여 신청</div>
-    <div class="event-info">
-      • 위에서 연습할 <strong>목표 방송</strong>과 <strong>모집 정원</strong>을 선택해 주세요.<br>
-      • 신청 전 이름과 생년월일을 미리 적고 대기합니다.<br>
-      • 정각에 버튼을 눌러 객관식 선택지에서 <strong>선택한 방송</strong>을 정확히 고르세요!
+  <!-- [1단계] 개인정보 입력 + 객관식 선택지 통합 폼 화면 -->
+  <div id="formStep" class="content">
+    <!-- 신청자 이름 -->
+    <div class="form-card">
+      <label class="card-label" for="userName">신청자 이름을 입력해 주세요. <span class="req">(필수)</span></label>
+      <input type="text" id="userName" class="input-text" placeholder="신분증과 동일한 이름 입력">
     </div>
 
-    <div class="form-group">
-      <label for="userName">신청자 이름 (신분증과 동일)<span class="req">*</span></label>
-      <input type="text" id="userName" class="input-text" placeholder="예: 홍길동">
-    </div>
-
-    <div class="form-group">
-      <label for="userBirth">생년월일 8자리<span class="req">*</span></label>
-      <input type="text" id="userBirth" class="input-text" maxlength="8" placeholder="예: 20050815">
-    </div>
-  </div>
-
-  <div id="step1Footer" class="bottom-area">
-    <button type="button" id="enterFormBtn" class="btn-submit" disabled>신청 시간 대기 중...</button>
-  </div>
-
-  <!-- [2단계] 정각 버튼 클릭 후 나타나는 객관식 폼 화면 -->
-  <div id="step2" class="content hidden">
-    <div class="event-title">참여 일정 및 동의 확인</div>
-    <div class="event-info" id="step2Hint">
-      목표 방송인 <strong>[261127 KBS 뮤직뱅크]</strong> 항목을 선택해 주세요.
-    </div>
-
-    <div class="form-group">
-      <label>참여 방송 선택 (필수)<span class="req">*</span></label>
-      <div class="radio-list" id="radioList">
-        <!-- JS에서 방송 목록이 랜덤 순서로 생성됩니다 -->
+    <!-- 전화번호 입력 칸 -->
+    <div class="form-card">
+      <label class="card-label" for="userPhone">전화번호를 입력해 주세요. <span class="req">(필수)</span></label>
+      <div class="phone-input-wrap">
+        <select id="countryCode" class="country-select">
+          <option value="+82" selected>+82</option>
+          <option value="+81">+81</option>
+          <option value="+1">+1</option>
+        </select>
+        <div class="phone-divider"></div>
+        <input type="tel" id="userPhone" class="phone-input" maxlength="11" placeholder="01012345678 ('-' 제외)">
       </div>
     </div>
 
-    <div class="form-group">
-      <label>개인정보 수집 및 이용 동의<span class="req">*</span></label>
-      <label class="radio-item" id="agreeBox">
-        <input type="checkbox" id="agreeCheck" style="width:18px; height:18px; margin-right:12px; accent-color:#00d2c4;">
-        <span>개인정보 수집 및 제3자 제공에 동의합니다.</span>
+    <!-- 생년월일 입력 칸 -->
+    <div class="form-card">
+      <label class="card-label" for="userBirth">생년월일을 입력해 주세요. <span class="req">(필수)</span></label>
+      <div class="card-subtext">신청 일자를 기준으로 만 15세 이상만 신청할 수 있습니다.</div>
+      <input type="text" id="userBirth" class="input-text" maxlength="8" placeholder="예: 20050815">
+      <div class="card-helper">연, 월, 일 순으로 입력해 주세요.</div>
+    </div>
+
+    <!-- 참여를 희망하는 이벤트명 객관식 선택지 -->
+    <div class="form-card">
+      <label class="card-label">참여를 희망하는 이벤트명 선택 <span class="req">(필수)</span></label>
+      <div class="card-subtext">하나만 선택할 수 있습니다. (목표: <strong id="targetHintText" style="color:#00a89d;">261127 KBS 뮤직뱅크</strong>)</div>
+      <div class="radio-list" id="radioList">
+        <!-- JS에서 선택지가 생성됩니다 -->
+      </div>
+    </div>
+
+    <!-- 개인정보 수집 및 이용 동의 -->
+    <div class="form-card">
+      <label class="agree-row">
+        <input type="checkbox" id="agreeCheck">
+        <span>이용약관을 확인했으며, 개인정보 수집·이용 및 제공에 동의합니다.</span>
       </label>
+      <div class="agree-sub">
+        <span>개인정보 수집 이용 동의</span>
+        <span>∨</span>
+      </div>
+      <div class="agree-sub">
+        <span>개인정보 제3자 제공 동의</span>
+        <span>∨</span>
+      </div>
     </div>
   </div>
 
-  <div id="step2Footer" class="bottom-area hidden">
-    <button type="button" id="finalSubmitBtn" class="btn-submit active">신청하기</button>
+  <div id="formFooter" class="bottom-area">
+    <button type="button" id="finalSubmitBtn" class="btn-submit" disabled>신청 오픈까지 10초 전</button>
   </div>
 
-  <!-- [3단계] 이벤트 신청 완료 및 선착순 피드백 화면 -->
-  <div id="step3" class="content hidden">
+  <!-- [2단계] 신청 상세 및 완료 피드백 화면 -->
+  <div id="completeStep" class="complete-screen hidden">
     <div class="complete-box">
       <div class="status-icon" id="statusIcon">✓</div>
       <div class="complete-title" id="completeTitle">이벤트 신청이 완료되었습니다</div>
-      <div class="complete-desc" id="completeDesc">사전녹화 참여 신청이 정상적으로 접수되었습니다.</div>
 
       <div class="result-card" id="resultSummary"></div>
       <div class="feedback-card" id="feedbackBox"></div>
@@ -543,47 +613,38 @@
   const syncText = document.getElementById('syncText');
   const offsetDisplay = document.getElementById('offsetDisplay');
   const showSelect = document.getElementById('showSelect');
-  const eventTitleDisplay = document.getElementById('eventTitleDisplay');
-  const step2Hint = document.getElementById('step2Hint');
+  const targetHintText = document.getElementById('targetHintText');
   const radioList = document.getElementById('radioList');
+  const headerTitle = document.getElementById('headerTitle');
 
   const targetTimeInput = document.getElementById('targetTimeInput');
   const set10SecBtn = document.getElementById('set10SecBtn');
   const capacityInput = document.getElementById('capacityInput');
   
-  const step1 = document.getElementById('step1');
-  const step1Footer = document.getElementById('step1Footer');
-  const enterFormBtn = document.getElementById('enterFormBtn');
-
-  const step2 = document.getElementById('step2');
-  const step2Footer = document.getElementById('step2Footer');
+  const formStep = document.getElementById('formStep');
+  const formFooter = document.getElementById('formFooter');
   const finalSubmitBtn = document.getElementById('finalSubmitBtn');
 
-  const step3 = document.getElementById('step3');
+  const completeStep = document.getElementById('completeStep');
   const statusIcon = document.getElementById('statusIcon');
   const completeTitle = document.getElementById('completeTitle');
-  const completeDesc = document.getElementById('completeDesc');
   const resultSummary = document.getElementById('resultSummary');
   const feedbackBox = document.getElementById('feedbackBox');
   const retryBtn = document.getElementById('retryBtn');
 
-  const ALL_SHOWS = [
-    "261126 Mnet 엠카운트다운",
-    "261127 KBS 뮤직뱅크",
-    "261128 MBC 쇼! 음악중심",
-    "261129 SBS 인기가요"
+  // 실제 위버스 폼처럼 함정 선택지를 포함한 목록 구성
+  const DECOY_OPTIONS = [
+    "I Want You",
+    "ENGENE"
   ];
 
-  let serverOffsetMs = 0; // 서버 시간과 기기 시간의 차이(ms)
+  let serverOffsetMs = 0;
   let targetTimestamp = null;
-  let enterClickTime = null;
 
-  // 현재 보정된 서버 시간 반환
   function getServerNow() {
     return new Date(Date.now() + serverOffsetMs);
   }
 
-  // 1. 표준 서버 시간 동기화 (네이비즘 원리)
   async function syncServerTime() {
     syncText.textContent = "서버 표준시 측정 중...";
     try {
@@ -615,36 +676,22 @@
     offsetDisplay.textContent = (serverOffsetMs / 1000).toFixed(1);
   }
 
-  // 2. 목표 방송 변경 시 화면 텍스트 업데이트
-  function updateTargetShowUI() {
-    const selectedShow = showSelect.value;
-    eventTitleDisplay.textContent = `${selectedShow} 사전녹화 참여 신청`;
-    step2Hint.innerHTML = `목표 방송인 <strong>[${selectedShow}]</strong> 항목을 정확히 선택해 주세요.`;
-  }
-
-  showSelect.addEventListener('change', updateTargetShowUI);
-
-  // 2단계 객관식 보기 생성
+  // 객관식 선택지 생성 (목표 방송 + 함정 선택지 배치)
   function renderRadioOptions() {
-    const shuffled = [...ALL_SHOWS].sort(() => Math.random() - 0.5);
-    radioList.innerHTML = shuffled.map(show => `
+    const selectedShow = showSelect.value;
+    targetHintText.textContent = selectedShow;
+
+    const options = [DECOY_OPTIONS[0], selectedShow, DECOY_OPTIONS[1]];
+    radioList.innerHTML = options.map(opt => `
       <label class="radio-item">
-        <input type="radio" name="schedule" value="[${show}] 선택">
-        <span>[${show}] 선택</span>
+        <input type="radio" name="schedule" value="${opt}">
+        <span>${opt}</span>
       </label>
     `).join('');
-
-    document.querySelectorAll('.radio-item input[type="radio"]').forEach(radio => {
-      radio.addEventListener('change', () => {
-        document.querySelectorAll('.radio-list .radio-item').forEach(el => el.classList.remove('selected'));
-        if (radio.checked) {
-          radio.closest('.radio-item').classList.add('selected');
-        }
-      });
-    });
   }
 
-  // 3. 목표 오픈 시간 설정
+  showSelect.addEventListener('change', renderRadioOptions);
+
   function setTargetSecondsFromNow(seconds) {
     const now = getServerNow();
     const target = new Date(now.getTime() + seconds * 1000);
@@ -670,11 +717,11 @@
   });
 
   // 초기 실행
-  updateTargetShowUI();
+  renderRadioOptions();
   setTargetSecondsFromNow(10);
   syncServerTime();
 
-  // 4. 실시간 시계 루프
+  // 실시간 시계 루프
   function updateClock() {
     const now = getServerNow();
     const hh = String(now.getHours()).padStart(2, '0');
@@ -685,67 +732,61 @@
     clockEl.innerHTML = `${hh}:${mm}:${ss}<span class="ms">.${ms}</span>`;
 
     if (targetTimestamp && now.getTime() >= targetTimestamp) {
-      if (enterFormBtn.disabled) {
-        enterFormBtn.disabled = false;
-        enterFormBtn.classList.add('active');
-        enterFormBtn.textContent = '신청하기';
+      if (finalSubmitBtn.disabled) {
+        finalSubmitBtn.disabled = false;
+        finalSubmitBtn.classList.add('active');
+        finalSubmitBtn.textContent = '신청하기';
       }
     } else {
-      if (!enterFormBtn.disabled) {
-        enterFormBtn.disabled = true;
-        enterFormBtn.classList.remove('active');
+      if (!finalSubmitBtn.disabled) {
+        finalSubmitBtn.disabled = true;
+        finalSubmitBtn.classList.remove('active');
       }
       const remain = Math.ceil((targetTimestamp - now.getTime()) / 1000);
-      enterFormBtn.textContent = `신청 오픈까지 ${remain > 0 ? remain : 0}초 전`;
+      finalSubmitBtn.textContent = `신청 오픈까지 ${remain > 0 ? remain : 0}초 전`;
     }
 
     requestAnimationFrame(updateClock);
   }
   requestAnimationFrame(updateClock);
 
-  // [1단계 -> 2단계]
-  enterFormBtn.addEventListener('click', () => {
-    const userName = document.getElementById('userName').value.trim();
-    const userBirth = document.getElementById('userBirth').value.trim();
-
-    if (!userName || !userBirth) {
-      alert('신청 시간 전에 이름과 생년월일을 먼저 입력해 주세요!');
-      return;
-    }
-
-    enterClickTime = getServerNow().getTime();
-    renderRadioOptions();
-
-    step1.classList.add('hidden');
-    step1Footer.classList.add('hidden');
-    step2.classList.remove('hidden');
-    step2Footer.classList.remove('hidden');
-  });
-
-  // [2단계 -> 3단계] 정원 기반 선착순 계산 및 피드백 생성
+  // 신청하기 버튼 클릭 시 검증 및 완료 화면 전환
   finalSubmitBtn.addEventListener('click', () => {
+    const userName = document.getElementById('userName').value.trim();
+    const countryCode = document.getElementById('countryCode').value;
+    const userPhone = document.getElementById('userPhone').value.trim();
+    const userBirth = document.getElementById('userBirth').value.trim();
     const selectedSchedule = document.querySelector('input[name="schedule"]:checked');
     const isAgreed = document.getElementById('agreeCheck').checked;
 
-    if (!selectedSchedule) {
-      alert('참여할 방송 선택지를 골라주세요.');
+    if (!userName) {
+      alert('신청자 이름을 입력해 주세요.');
       return;
     }
-
+    if (!userPhone) {
+      alert('전화번호를 입력해 주세요.');
+      return;
+    }
+    if (!userBirth) {
+      alert('생년월일 8자리를 입력해 주세요.');
+      return;
+    }
+    if (!selectedSchedule) {
+      alert('참여를 희망하는 이벤트명을 선택해 주세요.');
+      return;
+    }
     if (!isAgreed) {
-      alert('개인정보 수집 및 이용에 동의해 주세요.');
+      alert('개인정보 수집·이용 및 제공에 동의해 주세요.');
       return;
     }
 
     const finishTime = getServerNow().getTime();
     const totalElapsed = (finishTime - targetTimestamp) / 1000;
-    const reactionDelay = (enterClickTime - targetTimestamp) / 1000;
-    const formDuration = (finishTime - enterClickTime) / 1000;
 
     const capacity = Math.max(10, parseInt(capacityInput.value, 10) || 350);
     const targetShow = showSelect.value;
 
-    const minHumanTime = 1.30;
+    const minHumanTime = 0.25;
     const cutoffTime = Number((minHumanTime + (capacity / 100) * 0.65).toFixed(2));
 
     let estimatedRank;
@@ -758,10 +799,9 @@
 
     const isSuccess = totalElapsed <= cutoffTime;
     const diffSec = Math.abs(totalElapsed - cutoffTime).toFixed(2);
+    const isCorrectOption = selectedSchedule.value === targetShow;
 
-    const userName = document.getElementById('userName').value.trim();
-    const userBirth = document.getElementById('userBirth').value.trim();
-    const isCorrectOption = selectedSchedule.value.includes(targetShow);
+    headerTitle.textContent = '신청 상세';
 
     if (isSuccess && isCorrectOption) {
       statusIcon.className = 'status-icon success';
@@ -774,60 +814,53 @@
     } else {
       statusIcon.className = 'status-icon fail';
       statusIcon.textContent = '✕';
-      completeTitle.textContent = '이벤트 신청 완료 (정원 초과)';
+      completeTitle.textContent = '이벤트 신청이 완료되었습니다 (정원 초과)';
     }
 
     resultSummary.innerHTML = `
       <div>• <strong>신청자:</strong> ${userName} (${userBirth})</div>
-      <div>• <strong>목표 방송:</strong> ${targetShow}</div>
-      <div>• <strong>선택 항목:</strong> ${selectedSchedule.value} ${isCorrectOption ? '✅' : '❌(오답)'}</div>
+      <div>• <strong>연락처:</strong> ${countryCode} ${userPhone}</div>
+      <div>• <strong>선택 이벤트:</strong> ${selectedSchedule.value} ${isCorrectOption ? '✅' : '❌(오답)'}</div>
       <div>• <strong>설정 정원 / 예상 등수:</strong> ${capacity}명 중 <strong>약 ${estimatedRank}등</strong></div>
-      <div>• <strong>총 소요 시간:</strong> <strong>${totalElapsed.toFixed(2)}초</strong> (정원 마감 컷: ${cutoffTime}초)</div>
+      <div>• <strong>클릭 소요 시간:</strong> <strong>${totalElapsed.toFixed(2)}초</strong> (정원 마감 컷: ${cutoffTime}초)</div>
     `;
 
     if (!isCorrectOption) {
       feedbackBox.className = 'feedback-card fail';
       feedbackBox.innerHTML = `
-        <span class="feedback-title">⚠️ 방송 선택 오류 피드백</span>
-        연습 설정에서 고른 방송은 <strong>[${targetShow}]</strong>입니다. 글자를 끝까지 읽고 정확한 방송을 누르는 연습을 해보세요!
+        <span class="feedback-title">⚠️ 이벤트 선택 오류 피드백</span>
+        목표 이벤트는 <strong>[${targetShow}]</strong>입니다. 정각 전에 미리 이름, 전화번호, 생년월일, 이벤트 선택 및 동의 체크까지 모두 완료해 두세요!
       `;
     } else if (isSuccess) {
       feedbackBox.className = 'feedback-card success';
       feedbackBox.innerHTML = `
         <span class="feedback-title">🎉 합격 안정권! (커트라인보다 ${diffSec}초 빠름)</span>
-        • 정각 진입 반응 속도: <strong>${reactionDelay.toFixed(2)}초</strong><br>
-        • 객관식 탐색 및 제출 속도: <strong>${formDuration.toFixed(2)}초</strong><br>
-        이 속도라면 실제 ${targetShow} (${capacity}명) 사녹도 충분히 성공할 수 있습니다!
+        • 정각 오픈 후 제출 반응 속도: <strong>${totalElapsed.toFixed(2)}초</strong><br>
+        미리 모든 항목을 입력·체크해 두고 정각에 정확히 누르셨습니다!
       `;
     } else {
-      let advice = '';
-      if (reactionDelay > 0.6) {
-        advice = `정각 오픈 후 첫 버튼을 누르는 데 <strong>${reactionDelay.toFixed(2)}초</strong>가 걸렸습니다. 서버 시계 초 단위를 보고 0.1~0.3초 내에 바로 진입해 보세요.`;
-      } else {
-        advice = `진입(${reactionDelay.toFixed(2)}초)은 빨랐지만, 섞여 있는 보기 중 <strong>${targetShow}</strong>을 찾아 제출하는 데 <strong>${formDuration.toFixed(2)}초</strong>가 걸렸습니다. 글자 스캔 속도를 높여보세요.`;
-      }
-
       feedbackBox.className = 'feedback-card fail';
       feedbackBox.innerHTML = `
         <span class="feedback-title">⏱️ 정원 안에 들려면 최소 ${diffSec}초 더 빨라야 합니다!</span>
         ${capacity}명 정원 마감 컷(<strong>${cutoffTime}초</strong>)보다 <strong>${diffSec}초</strong> 늦었습니다.<br><br>
-        💡 <strong>분석:</strong> ${advice}
+        💡 <strong>팁:</strong> 정각이 되기 전에 이름, 전화번호, 생년월일, 이벤트 선택, 약관 동의를 모두 미리 마친 뒤 00초 정각에 <strong>[신청하기]</strong>만 바로 누르는 연습을 해보세요.
       `;
     }
 
-    step2.classList.add('hidden');
-    step2Footer.classList.add('hidden');
-    step3.classList.remove('hidden');
+    formStep.classList.add('hidden');
+    formFooter.classList.add('hidden');
+    completeStep.classList.remove('hidden');
+    window.scrollTo(0, 0);
   });
 
   // 다시 연습하기
   retryBtn.addEventListener('click', () => {
-    document.getElementById('agreeCheck').checked = false;
-
-    step3.classList.add('hidden');
-    step1.classList.remove('hidden');
-    step1Footer.classList.remove('hidden');
+    headerTitle.textContent = '이벤트 신청';
+    completeStep.classList.add('hidden');
+    formStep.classList.remove('hidden');
+    formFooter.classList.remove('hidden');
     setTargetSecondsFromNow(10);
+    window.scrollTo(0, 0);
   });
 </script>
 
